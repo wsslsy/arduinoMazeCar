@@ -1,4 +1,4 @@
-//该文件包含一些常用控制函数
+// 该文件包含一些常用控制函数
 
 /*
  * @函数名：void speedControl(int side, int dir)；
@@ -9,26 +9,34 @@
  *        该数值应根据实际进行适当调节。
  */
 #define MISTAKE 5
-void speedControl(int side, int dir) {
-  int A,B;
+void speedControl(int side, int dir)
+{
+  int A, B;
   int s;
-  if(LEFT == side){
+  if (LEFT == side)
+  {
     A = carLeftA;
     B = carLeftB;
     s = SPEED;
-  }else if(RIGHT == side){
-    A = carRightA;
-    B = carRightB; 
-    s = SPEED + MISTAKE;   
   }
-  if (FORWARD == dir) {
+  else if (RIGHT == side)
+  {
+    A = carRightA;
+    B = carRightB;
+    s = SPEED + MISTAKE;
+  }
+  if (FORWARD == dir)
+  {
     analogWrite(A, s);
     analogWrite(B, 0);
   }
-  else if (BACK == dir) {
+  else if (BACK == dir)
+  {
     analogWrite(A, 0);
     analogWrite(B, s);
-  }else if (STOP == dir) {
+  }
+  else if (STOP == dir)
+  {
     analogWrite(A, 0);
     analogWrite(B, 0);
   }
@@ -41,19 +49,25 @@ void speedControl(int side, int dir) {
  *        例子中使用450ms，需要根据实际进行微调。
  */
 #define TURN_TIME 450
-void turn(int dir){
-  if(LEFT == dir){
-    speedControl(RIGHT,FORWARD);
-    speedControl(LEFT,BACK);
+void turn(int dir)
+{
+  if (LEFT == dir)
+  {
+    speedControl(RIGHT, FORWARD);
+    speedControl(LEFT, BACK);
     delay(TURN_TIME);
     brake();
-  }else if(RIGHT == dir){
-    speedControl(LEFT,FORWARD);
-    speedControl(RIGHT,BACK);
+  }
+  else if (RIGHT == dir)
+  {
+    speedControl(LEFT, FORWARD);
+    speedControl(RIGHT, BACK);
     delay(TURN_TIME);
     brake();
-  }else{
-    //do nothing
+  }
+  else
+  {
+    // do nothing
   }
 }
 /*
@@ -61,27 +75,30 @@ void turn(int dir){
  * @参数：无
  * @备注：封装停车函数，便于调用。
  */
-void brake(){
-  speedControl(LEFT,STOP);
-  speedControl(RIGHT,STOP);
+void brake()
+{
+  speedControl(LEFT, STOP);
+  speedControl(RIGHT, STOP);
 }
 /*
  * @函数名：forward()；
  * @参数：无
  * @备注：封装前进函数，便于调用。
  */
-void forward(){
-  speedControl(RIGHT,FORWARD);
-  speedControl(LEFT,FORWARD);
+void forward()
+{
+  speedControl(RIGHT, FORWARD);
+  speedControl(LEFT, FORWARD);
 }
 /*
  * @函数名：backward()；
  * @参数：无
  * @备注：封装后退函数，便于调用，此项目中未用到。
  */
-void backward(){
-  speedControl(RIGHT,BACK);
-  speedControl(LEFT,BACK);
+void backward()
+{
+  speedControl(RIGHT, BACK);
+  speedControl(LEFT, BACK);
 }
 /*
  * @函数名：long controlServoAndGetDistance(int dir)；
@@ -93,21 +110,28 @@ void backward(){
  *        应根据实际情况进行微调。
  *        例子中，LEFT方向没有用到。
  */
-long controlServoAndGetDistance(int dir){
+long controlServoAndGetDistance(int dir)
+{
   long disAvg = 999;
-  if(FORWARD == dir){
+  if (FORWARD == dir)
+  {
     servoUltraSonic.write(97);
-  }else if(LEFT == dir){
-    servoUltraSonic.write(180);
-  }else if(RIGHT == dir){
-    servoUltraSonic.write(19);
-  }else{
-    //do nothing
   }
+  else if (LEFT == dir)
+  {
+    servoUltraSonic.write(180);
+  }
+  else if (RIGHT == dir)
+  {
+    servoUltraSonic.write(19);
+  }
+  else
+  {
+    // do nothing
+  }
+  // 该延时的作用为，等待舵机转向完成。
   delay(500);
-     //该延时的作用为，等待舵机转向完成。
-  disAvg = sr04.DistanceAvg(25,5);
-      //调用SR04库的平均值采样方法。该方法每间隔25ms采样5次，去最大最小值，取平均值。
+  // 调用SR04库的平均值采样方法。该方法每间隔25ms采样5次，去最大最小值，取平均值。
+  disAvg = sr04.DistanceAvg(25, 5);
   return disAvg;
 }
-
